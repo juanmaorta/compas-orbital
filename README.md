@@ -85,20 +85,21 @@ npm run dev      # python3 -m http.server 8000 → http://localhost:8000
 npm test         # pruebas del dominio
 ```
 
-## Publicar en Cloudflare Pages
+## Publicar en Cloudflare
 
-No hay build: se sube tal cual.
-
-**Desde el panel** (despliega en cada push): Workers & Pages → Create →
-Pages → Connect to Git → este repo. Framework preset *None*, build command
-vacío, output directory `/`.
+No hay build: se sirven los ficheros de la raíz tal cual, como un Worker de
+solo assets (`wrangler.jsonc`).
 
 **Desde la terminal:**
 
 ```sh
 npx wrangler login
-npx wrangler pages deploy . --project-name=compas-orbital
+npx wrangler deploy
 ```
+
+**Desde el panel** (despliega en cada push): Workers & Pages → Create app →
+Import a repository → este repo. Detecta `wrangler.jsonc`; build command
+vacío y deploy command `npx wrangler deploy`.
 
 ## Pendiente
 

@@ -1,0 +1,10 @@
+{
+  // Worker de solo assets: no hay código de servidor, solo los ficheros
+  // estáticos de la raíz del repo. Se despliega con `npx wrangler deploy`.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "compas-orbital",
+  "compatibility_date": "2026-09-15",
+  "assets": {
+    "directory": "./"
+  }
+}
