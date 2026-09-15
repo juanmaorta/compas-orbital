@@ -97,7 +97,7 @@ vacío, output directory `/`.
 
 ```sh
 npx wrangler login
-npx wrangler pages deploy . --project-name=compas-orbita
+npx wrangler pages deploy . --project-name=compas-orbital
 ```
 
 ## Pendiente

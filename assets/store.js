@@ -4,8 +4,8 @@
 
 import { cloneState, sanitize, encode, decode, slug } from "./compas.js";
 
-const KEY_CURRENT = "compas-orbita:actual";
-const KEY_LIBRARY = "compas-orbita:biblioteca";
+const KEY_CURRENT = "compas-orbital:actual";
+const KEY_LIBRARY = "compas-orbital:biblioteca";
 
 function read(key) {
   try {
