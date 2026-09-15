@@ -1,0 +1,11 @@
+{
+  "name": "compas-orbita",
+  "version": "1.0.0",
+  "private": true,
+  "description": "El compás de doce de la soleá por bulerías en círculo, por voces de cajón flamenco",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "test": "node --test test/*.test.js"
+  }
+}
