@@ -9,6 +9,12 @@
 <meta property="og:description" content="El compás de doce de la soleá por bulerías, en círculo y por voces del cajón.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%230B1017'/><circle cx='16' cy='16' r='10.5' fill='none' stroke='%236E8296' stroke-width='1.2'/><circle cx='16' cy='16' r='6.5' fill='none' stroke='%23E3A53C' stroke-width='1.2'/><circle cx='16' cy='6' r='2.4' fill='%23E0574A'/></svg>">
+<meta name="theme-color" content="#E9EBF1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1017" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Compás">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
@@ -94,5 +100,14 @@
   </footer>
 </div>
 <script type="module" src="assets/app.js"></script>
+<script>
+  /* Instalable y con arranque sin conexión. Va fuera del módulo a propósito:
+     si el grafo de módulos fallara, el registro no debe caer con él. */
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
 </body>
 </html>

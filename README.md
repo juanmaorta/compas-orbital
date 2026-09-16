@@ -96,6 +96,9 @@ assets/audio.js     las voces y el clic, sintetizados
 assets/dial.js      el SVG: anillos, puntos, aguja, tira del conteo
 assets/store.js     persistencia: un estado por palo, la biblioteca y la URL
 assets/app.js       estado, reloj, selectores, panel y el embudo update()
+sw.js               arranque sin conexión (caché versionada)
+manifest.webmanifest  para que se instale en la pantalla de inicio
+tools/make-icons.py   genera los iconos PNG sin dependencias
 test/compas.test.js  el dominio, sin navegador
 test/store.test.js   las migraciones, con el almacén inyectado
 ```
@@ -136,6 +139,21 @@ de compás) o solo se refrescan los atributos de los puntos. Antes cada cambio
 llevaba pegado a mano su repintado y su guardado —once llamadas sueltas—, y un
 repintado olvidado dejaba el dial desfasado sin que nadie se enterara.
 
+## Instalarla en el móvil o la tablet
+
+No hay app ni tienda: es una PWA. En **Android** (Chrome) sale solo el aviso de
+instalar; en **iOS** hay que hacerlo desde Safari → Compartir → *Añadir a
+pantalla de inicio*. Queda con su icono, a pantalla completa y **abre sin
+conexión**, que es lo que importa en un local de ensayo o en un aula con wifi
+de pena.
+
+Dos límites de plataforma que conviene saber:
+
+- **El interruptor de silencio del iPhone silencia el Web Audio en Safari.** Si
+  no se oye nada, es lo primero que hay que mirar.
+- **Mantener la pantalla encendida** mientras suena: en Android hay API para
+  eso; en iOS no se puede contar con ella.
+
 ## Desarrollo
 
 Los módulos ES necesitan servidor (con `file://` el navegador los bloquea):
@@ -157,12 +175,23 @@ npx wrangler login
 npx wrangler deploy
 ```
 
+**Antes de desplegar un cambio de código: subir `VERSION` en `sw.js`.** La
+caché del service worker es "caché primero" y versionada, de modo que todos
+los ficheros salen de la misma generación y nunca se mezclan versiones de los
+módulos; el precio es ese bump manual. Sin él, quien tenga la app instalada
+seguirá viendo la versión vieja.
+
 **Desde el panel** (despliega en cada push): Workers & Pages → Create app →
 Import a repository → este repo. Detecta `wrangler.jsonc`; build command
 vacío y deploy command `npx wrangler deploy`.
 
 ## Pendiente
 
+- **Usable en móvil y tablet.** Hoy el diseño es de dos columnas que se apilan
+  por debajo de 880 px: en un móvil quedan el dial arriba y todos los
+  controles debajo, así que se toca y se hace scroll a la vez. En un atril eso
+  no sirve. Hace falta dial a pantalla completa, tempo y play siempre visibles
+  y el resto plegado — el objetivo real es una tablet en el atril.
 - **Patrones de tangos**, y una biblioteca de patrones curados por palo que
   venga con la página.
 - **Samples reales.** Tres o cuatro tomas de cada golpe, alternadas al azar,

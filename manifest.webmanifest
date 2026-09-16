@@ -1,0 +1,19 @@
+{
+  "name": "Compás en órbita",
+  "short_name": "Compás",
+  "description": "El compás flamenco en círculo, con una órbita por cada voz del cajón.",
+  "lang": "es",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B1017",
+  "theme_color": "#0B1017",
+  "categories": ["music", "education"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png",
+      "purpose": "maskable" }
+  ]
+}
