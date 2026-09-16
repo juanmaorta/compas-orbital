@@ -23,17 +23,24 @@ export const ACCENTS = { 7: [0, 3, 7, 8, 10], 6: [0, 3, 6, 8, 10] };
 export const SLOTS = 24;
 
 /* Orden estable de las voces para serializar (independiente del dibujo). */
-export const VOICES = ["grave", "seco", "fantasma"];
+export const VOICES = ["grave", "seco", "fantasma", "metro"];
+
+/* El formato 1 de la URL no llevaba metrónomo. Se sigue leyendo. */
+const LEGACY_VOICES = ["grave", "seco", "fantasma"];
 
 /* Las órbitas, de fuera a dentro. dotR es el radio del punto cuando cae en un
    tiempo del compás; dotRHalf, cuando cae en un medio. */
 export const RINGS = [
   { id: "fantasma", name: "Notas fantasma", tech: "dedos, apagado",
-    radius: 208, dotR: 5.5, dotRHalf: 4 },
+    radius: 212, dotR: 5.5, dotRHalf: 4 },
   { id: "seco", name: "Golpe seco", tech: "esquina, agudo",
-    radius: 164, dotR: 8, dotRHalf: 5 },
+    radius: 174, dotR: 8, dotRHalf: 5 },
   { id: "grave", name: "Golpe grave", tech: "centro del parche",
-    radius: 120, dotR: 9.5, dotRHalf: 5.5 }
+    radius: 134, dotR: 9.5, dotRHalf: 5.5 },
+  /* El metrónomo no es una voz del cajón: es el reloj contra el que se toca,
+     y por eso va el más pegado al eje y con el color de la aguja. */
+  { id: "metro", name: "Metrónomo", tech: "clic, referencia",
+    radius: 98, dotR: 4.5, dotRHalf: 3.5 }
 ];
 
 export function isAccent(variant, position) {
@@ -59,15 +66,20 @@ export function basePattern(variant) {
   const grave = new Array(SLOTS).fill(false);
   const seco = new Array(SLOTS).fill(false);
   const fantasma = new Array(SLOTS).fill(false);
+  const metro = new Array(SLOTS).fill(false);
   for (const p of [0, 3, 10]) grave[p * 2] = true;
   for (const p of [variant === 6 ? 6 : 7, 8]) seco[p * 2] = true;
   for (let q = 1; q < SLOTS; q += 2) fantasma[q] = true;
-  return { grave, seco, fantasma };
+  /* El clic no va en cada pulso: en el compás de doce cae en los pares
+     (12, 2, 4, 6, 8, 10), o sea uno cada dos tiempos. De ahí que al practicar
+     el metrónomo de verdad se ponga a la mitad de ppm. */
+  for (let p = 0; p < 12; p += 2) metro[p * 2] = true;
+  return { grave, seco, fantasma, metro };
 }
 
 export function baseState(variant = 7) {
   const on = basePattern(variant);
-  const gains = { grave: 0.9, seco: 0.8, fantasma: 0.45 };
+  const gains = { grave: 0.9, seco: 0.8, fantasma: 0.45, metro: 0.5 };
   const rings = {};
   for (const id of VOICES) {
     rings[id] = { on: on[id], offset: 0, gain: gains[id], muted: false };
@@ -139,7 +151,7 @@ function hexToBits(hex) {
 }
 
 export function encode(state) {
-  const parts = ["1", String(state.variant), String(state.bpm)];
+  const parts = ["2", String(state.variant), String(state.bpm)];
   for (const id of VOICES) {
     const r = state.rings[id];
     parts.push(`${bitsToHex(r.on)}-${r.offset}`);
@@ -150,14 +162,33 @@ export function encode(state) {
 export function decode(text) {
   if (!text) return null;
   const parts = String(text).split(".");
-  if (parts[0] !== "1" || parts.length < 6) return null;
+  const voices = parts[0] === "2" ? VOICES : parts[0] === "1" ? LEGACY_VOICES : null;
+  if (!voices || parts.length < 3 + voices.length) return null;
   const raw = { variant: Number(parts[1]) === 6 ? 6 : 7, bpm: Number(parts[2]), rings: {} };
-  VOICES.forEach((id, i) => {
+  voices.forEach((id, i) => {
     const [hex, offset] = String(parts[3 + i] || "").split("-");
     if (!hex) return;
     raw.rings[id] = { on: hexToBits(hex), offset: Number(offset) || 0 };
   });
   return sanitize(raw);
+}
+
+/* A qué velocidad late el clic. Como el metrónomo no suena en cada pulso, su
+   ppm no es el de la página: con un clic cada dos tiempos, es la mitad.
+   La rotación no cambia nada — girar el anillo conserva los huecos. */
+export function clickRate(state) {
+  const on = state.rings.metro.on;
+  const hits = [];
+  for (let i = 0; i < SLOTS; i++) if (on[i]) hits.push(i);
+  if (!hits.length) return null;
+  const gaps = hits.map((slot, i) => {
+    const next = i + 1 < hits.length ? hits[i + 1] : hits[0] + SLOTS;
+    return next - slot;
+  });
+  const gap = gaps[0];
+  if (!gaps.every((g) => g === gap)) return { regular: false, gap: null, bpm: null };
+  /* un paso es medio tiempo, de ahí el 2 */
+  return { regular: true, gap, beats: gap / 2, bpm: (2 * state.bpm) / gap };
 }
 
 /* Identificador legible para un nombre de patrón. */

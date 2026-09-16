@@ -1,4 +1,4 @@
-/* Las tres voces del cajón, sintetizadas. No son samples: un tono grave que
+/* Las tres voces del cajón más el clic del metrónomo, sintetizados. No son samples: un tono grave que
    cae, ruido filtrado para el agudo (con el zumbido de las cuerdas de dentro)
    y un golpe muy corto y sordo para la fantasma. Aproximan lo justo para
    estudiar el compás. */
@@ -73,6 +73,11 @@ export function createAudio() {
       burst(at, "bandpass", 2100, 1.1, 0.085, v * 0.5); // chasquido
       burst(at, "highpass", 4200, 0.7, 0.13, v * 0.3);  // cuerdas de dentro
       tone(at, "triangle", 340, 340, 0.05, v * 0.28);   // cuerpo
+    } else if (voice === "metro") {
+      /* Un clic, no un golpe: corto, agudo y sin cuerpo, para que no se
+         confunda con el cajón. */
+      tone(at, "square", 1750, 1750, 0.028, v * 0.16);
+      burst(at, "highpass", 5000, 0.7, 0.012, v * 0.12);
     } else {
       burst(at, "bandpass", 820, 0.9, 0.032, v * 0.42); // dedo apagado
       burst(at, "lowpass", 260, 0.7, 0.028, v * 0.2);

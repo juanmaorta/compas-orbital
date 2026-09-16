@@ -28,9 +28,10 @@ Tres órbitas concéntricas, de dentro a fuera:
 
 | Órbita | Voz | Técnica |
 |---|---|---|
-| interior | Golpe grave | centro del parche |
-| media | Golpe seco | esquina superior, agudo |
 | exterior | Notas fantasma | dedos, apagado |
+| — | Golpe seco | esquina superior, agudo |
+| — | Golpe grave | centro del parche |
+| interior | Metrónomo | clic de referencia |
 
 Las tres comparten una rejilla de **24 posiciones**: los doce tiempos y sus
 medios. Los puntos grandes son tiempos; los pequeños, medios — el *9 y medio*,
@@ -40,6 +41,21 @@ por ejemplo. El patrón de arranque reparte los cinco acentos entre el grave
 Cada órbita se puede **rotar** de medio en medio tiempo. Eso desplaza la voz
 dentro del ciclo sin reescribirla, que es la manera de oír el mismo patrón
 entrando por otro sitio del compás.
+
+## El metrónomo
+
+La órbita interior no es una voz del cajón: es el reloj contra el que se toca,
+y por eso lleva el color de la aguja.
+
+El clic **no va en cada pulso**. En el compás de doce cae en los pares — 12, 2,
+4, 6, 8, 10 —, o sea uno cada dos tiempos, y de ahí que el metrónomo de verdad
+haya que ponerlo a la mitad de ppm que la página. Esa división, que se hacía a
+mano cada vez, la dice ahora la página bajo el slider de tempo: *clic cada 2
+tiempos · 75 ppm en tu metrónomo*. Si editas el clic hasta dejarlo irregular,
+lo dice en lugar de inventarse un número.
+
+En tangos, cuando se añada el 4/4, el clic va en los pulsos 1 y 3: misma idea,
+otro patrón en la misma órbita.
 
 Los sonidos están **sintetizados** en el navegador con Web Audio: un tono
 grave que cae de 145 a 78 Hz, ruido en banda con el zumbido de las cuerdas
@@ -72,9 +88,10 @@ una voz medio tiempo, sus puntos se vuelven pequeños — porque eso es
 exactamente lo que ha pasado musicalmente: ahora cae en medios.
 
 **Un compás entero cabe en la URL.** Las 24 posiciones de una voz son 24 bits
-= 6 dígitos hex, así que `#c=1.7.150.820018-0.000280-0.d55555-0` lleva el
-acento, el tempo, los tres patrones y sus rotaciones. Los volúmenes no viajan:
-son mezcla, no compás.
+= 6 dígitos hex, así que `#c=2.7.150.820008-0.000280-0.555555-0.888888-0` lleva el acento, el tempo, las cuatro
+voces y sus rotaciones. Los volúmenes no viajan: son mezcla, no compás. El
+primer número es la versión del formato: los enlaces `1.`, de antes del
+metrónomo, se siguen leyendo.
 
 ## Desarrollo
 

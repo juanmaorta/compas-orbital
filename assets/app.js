@@ -5,7 +5,7 @@
    y guarda a qué hora suena cada uno; la aguja y los destellos se pintan
    luego contra ese reloj, no contra el del navegador. */
 
-import { SLOTS, RINGS, VOICES, baseState, basePattern, cloneState, fmtOffset } from "./compas.js";
+import { SLOTS, RINGS, VOICES, baseState, basePattern, cloneState, fmtOffset, clickRate } from "./compas.js";
 import { createAudio } from "./audio.js";
 import { createDial } from "./dial.js";
 import * as store from "./store.js";
@@ -22,6 +22,7 @@ const hub = $("hub"), hubGlyph = $("hubGlyph"), hubBpm = $("hubBpm");
 const tempo = $("tempo"), tempoVal = $("tempoVal");
 const v7 = $("v7"), v6 = $("v6");
 const voicesEl = $("voices");
+const metroNote = $("metroNote");
 const libName = $("libName"), libSave = $("libSave"), libList = $("libList"), libHint = $("libHint");
 const LIB_HINT = libHint.innerHTML;
 
@@ -103,6 +104,7 @@ function toggleDot(voice, idx) {
   const st = state.rings[voice];
   st.on[idx] = !st.on[idx];
   dial.paint(state);
+  if (voice === "metro") updateMetroNote();
   if (st.on[idx]) audio.hit(voice, 0, st.gain); // que se oiga lo que pones
   store.saveCurrent(state);
 }
@@ -122,6 +124,31 @@ function setBpm(bpm) {
   tempo.value = bpm;
   tempoVal.textContent = bpm;
   hubBpm.textContent = bpm;
+  updateMetroNote();
+}
+
+/* Cuántos tiempos hay entre clic y clic, en palabras. */
+function gapLabel(beats) {
+  if (beats === 0.5) return "cada medio tiempo";
+  if (beats === 1) return "en cada tiempo";
+  return `cada ${String(beats).replace(".", ",")} tiempos`;
+}
+
+/* Traduce el tempo de la página al que hay que ponerle al metrónomo de verdad,
+   que es la división que se hacía a mano cada vez. */
+function updateMetroNote() {
+  const rate = clickRate(state);
+  if (!rate) {
+    metroNote.textContent = "Metrónomo sin clics: enciende alguno en la órbita interior.";
+    return;
+  }
+  if (!rate.regular) {
+    metroNote.textContent = "Clics irregulares: no hay un ppm único que ponerle al metrónomo.";
+    return;
+  }
+  const bpm = Math.round(rate.bpm * 10) / 10;
+  metroNote.innerHTML =
+    `Clic ${gapLabel(rate.beats)} · <b>${String(bpm).replace(".", ",")} ppm</b> en tu metrónomo`;
 }
 
 /* Redibuja todo a partir del estado (al cargar y al traer un patrón). */
@@ -283,6 +310,7 @@ $("reset").addEventListener("click", () => {
 $("clear").addEventListener("click", () => {
   for (const id of VOICES) state.rings[id].on = new Array(SLOTS).fill(false);
   dial.paint(state);
+  updateMetroNote();
   store.saveCurrent(state);
 });
 $("share").addEventListener("click", async () => {

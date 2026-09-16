@@ -5,6 +5,8 @@
 import { BEATS, SYLL, STRIP, SLOTS, RINGS, isAccent, beatLabel } from "./compas.js";
 
 const CX = 260, CY = 260;
+/* radios de la escena: los radios de los tiempos, el borde barrido y los números */
+const R_SPOKE_IN = 84, R_SPOKE_OUT = 230, R_NUM = 252;
 const NS = "http://www.w3.org/2000/svg";
 
 function el(tag, attrs) {
@@ -41,21 +43,21 @@ export function createDial(svg, countEl, onToggle) {
     }
     for (let p = 0; p < 12; p++) {
       const a = angleOf(p, 12);
-      const [x1, y1] = point(96, a);
-      const [x2, y2] = point(232, a);
+      const [x1, y1] = point(R_SPOKE_IN, a);
+      const [x2, y2] = point(R_SPOKE_OUT, a);
       gStatic.appendChild(el("line", {
         class: "spoke" + (isAccent(variant, p) ? " accent" : ""), x1, y1, x2, y2
       }));
     }
     for (let p = 0; p < 12; p++) {
       const a = angleOf(p, 12);
-      const [x, y] = point(252, a);
+      const [x, y] = point(R_NUM, a);
       const text = el("text", { class: "beat-num" + (isAccent(variant, p) ? " accent" : ""), x, y });
       text.textContent = BEATS[p];
       gStatic.appendChild(text);
       numEls.push(text);
       if (isAccent(variant, p)) {
-        const [tx, ty] = point(232, a);
+        const [tx, ty] = point(R_SPOKE_OUT, a);
         gStatic.appendChild(el("circle", { class: "accent-tick", cx: tx, cy: ty, r: 2 }));
       }
     }
@@ -140,12 +142,12 @@ export function createDial(svg, countEl, onToggle) {
     needle.setAttribute("transform", `rotate(${deg.toFixed(2)} ${CX} ${CY})`);
     if (!sweep) return;
     if (pos <= 0.0001) { sweep.setAttribute("d", ""); return; }
-    const [sx, sy] = point(232, -90);
-    const [ex, ey] = point(232, angleOf(pos, SLOTS));
+    const [sx, sy] = point(R_SPOKE_OUT, -90);
+    const [ex, ey] = point(R_SPOKE_OUT, angleOf(pos, SLOTS));
     const big = pos / SLOTS > 0.5 ? 1 : 0;
     sweep.setAttribute("d",
       `M ${CX} ${CY} L ${sx.toFixed(2)} ${sy.toFixed(2)} ` +
-      `A 232 232 0 ${big} 1 ${ex.toFixed(2)} ${ey.toFixed(2)} Z`);
+      `A ${R_SPOKE_OUT} ${R_SPOKE_OUT} 0 ${big} 1 ${ex.toFixed(2)} ${ey.toFixed(2)} Z`);
   }
 
   /* Ilumina el tiempo en curso en el anillo y en la tira del conteo. */

@@ -49,7 +49,8 @@ export function removePattern(id) {
   return write(KEY_LIBRARY, all);
 }
 
-/* Un compás entero cabe en la URL: #c=1.7.150.802-0.0140-0.aaaa-0 */
+/* Un compás entero cabe en la URL: #c=2.7.150.820008-0.000280-0.555555-0.888888-0
+   (versión del formato, acento, ppm y las cuatro voces con su rotación) */
 export function fromHash() {
   const match = /[#&]c=([^&]+)/.exec(location.hash || "");
   return match ? decode(decodeURIComponent(match[1])) : null;
