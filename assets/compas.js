@@ -31,11 +31,11 @@ const LEGACY_VOICES = ["grave", "seco", "fantasma"];
 /* Las órbitas, de fuera a dentro. dotR es el radio del punto cuando cae en un
    tiempo del compás; dotRHalf, cuando cae en un medio. */
 export const RINGS = [
-  { id: "fantasma", name: "Notas fantasma", tech: "dedos, apagado",
+  { id: "fantasma", name: "Relleno", tech: "dedos, apagado",
     radius: 212, dotR: 5.5, dotRHalf: 4 },
-  { id: "seco", name: "Golpe seco", tech: "esquina, agudo",
+  { id: "seco", name: "Agudo", tech: "esquina del parche",
     radius: 174, dotR: 8, dotRHalf: 5 },
-  { id: "grave", name: "Golpe grave", tech: "centro del parche",
+  { id: "grave", name: "Grave", tech: "centro del parche",
     radius: 134, dotR: 9.5, dotRHalf: 5.5 },
   /* El metrónomo no es una voz del cajón: es el reloj contra el que se toca,
      y por eso va el más pegado al eje y con el color de la aguja. */
@@ -60,8 +60,8 @@ export function fmtOffset(offset) {
 }
 
 /* Punto de partida: el grave sostiene 12, 3 y 10; el agudo remata en 7 y 8
-   (o en 6 y 8), de modo que entre las dos voces suenan los cinco acentos; las
-   fantasmas rellenan todas las contras. */
+   (o en 6 y 8), de modo que entre las dos voces suenan los cinco acentos; el
+   relleno cubre todas las contras. */
 export function basePattern(variant) {
   const grave = new Array(SLOTS).fill(false);
   const seco = new Array(SLOTS).fill(false);

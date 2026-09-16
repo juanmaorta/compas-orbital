@@ -24,19 +24,19 @@ una decisión de escuela y de gusto, y las dos suenan a soleá por bulerías.
 
 ## Las voces
 
-Tres órbitas concéntricas, de dentro a fuera:
+Tres voces del cajón y el reloj, en órbitas concéntricas de fuera a dentro:
 
 | Órbita | Voz | Técnica |
 |---|---|---|
-| exterior | Notas fantasma | dedos, apagado |
-| — | Golpe seco | esquina superior, agudo |
-| — | Golpe grave | centro del parche |
+| exterior | Relleno | dedos, apagado |
+| — | Agudo | esquina del parche |
+| — | Grave | centro del parche |
 | interior | Metrónomo | clic de referencia |
 
 Las tres comparten una rejilla de **24 posiciones**: los doce tiempos y sus
 medios. Los puntos grandes son tiempos; los pequeños, medios — el *9 y medio*,
 por ejemplo. El patrón de arranque reparte los cinco acentos entre el grave
-(12, 3, 10) y el agudo (7, 8), y deja las fantasmas rellenando las contras.
+(12, 3, 10) y el agudo (7, 8), y deja el relleno cubriendo las contras.
 
 Cada órbita se puede **rotar** de medio en medio tiempo. Eso desplaza la voz
 dentro del ciclo sin reescribirla, que es la manera de oír el mismo patrón
