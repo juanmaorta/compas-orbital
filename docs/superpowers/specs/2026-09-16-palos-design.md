@@ -49,11 +49,23 @@ Una tabla `PALOS` en `compas.js`. Cada palo se describe entero:
     { id: "7", label: "12·3·7·8·10", accents: [0,3,7,8,10] },
     { id: "6", label: "12·3·6·8·10", accents: [0,3,6,8,10] }
   ],
-  metro: [0,2,4,6,8,10],    // clic por defecto, en POSICIONES de tiempo
   tempo: { min: 80, max: 260, default: 150 },
-  base: { grave: [0,3,10], seco: {"7":[7],"6":[6], always:[8]}, fantasma: "contras" }
+  base(variant) {          // patrón de arranque: slots por voz, no tiempos
+    return {
+      grave: beats([0, 3, 10]),                    // helper: tiempo → slot
+      seco: beats([variant === "6" ? 6 : 7, 8]),
+      fantasma: offbeats(),                        // todas las contras
+      metro: beats([0, 2, 4, 6, 8, 10])            // el clic, en los pares
+    };
+  }
 }
 ```
+
+`base()` devuelve **slots**, no tiempos, y se construye con dos ayudas
+(`beats()` convierte posiciones de tiempo a slots multiplicando por `sub`;
+`offbeats()` marca todo lo que no cae en tiempo). Así el clic por defecto vive
+donde viven los demás patrones, en lugar de en un campo aparte, y no hay
+cadenas mágicas describiendo un patrón.
 
 Las dos entradas iniciales:
 
@@ -66,6 +78,7 @@ Las dos entradas iniciales:
 | Variantes | `12·3·7·8·10`, `12·3·6·8·10` | `1·3` (acentos en 1 y 3) |
 | Conteo | un DOS un dos TRES… | UN dos TRES cuatro |
 | Clic | pares: 12,2,4,6,8,10 | 1 y 3 |
+| Orden del conteo | arranca en el 11 (`un DOS`) | del 1 al 4, sin arranque |
 | Tempo | 80–260, arranca en 150 | 60–200, arranca en 110 |
 | Voces del cajón | las actuales | **vacías** |
 
@@ -87,10 +100,18 @@ por bulerías, uno de los cuatro en tangos.
 `on` tiene siempre la longitud de la rejilla del palo activo. `sanitize()`
 valida contra el palo, no contra una constante.
 
+Los identificadores de variante pasan a ser **cadenas** (`"7"`, `"6"`, `"13"`),
+porque en tangos no son números de tiempo. Lo guardado y los enlaces viejos
+llevan el número 7 o 6: se mapean a `"7"` y `"6"` al leer.
+
+Cada palo guarda **su propio ppm** en su estado de trabajo; el `default` del
+palo solo se usa la primera vez, y el rango solo se aplica al entrar por
+primera vez o al leer un valor fuera de límites.
+
 ## Comportamiento
 
 - **Cambiar de palo** reconstruye el dial (puntos, números, conteo, acentos) y
-  ajusta el tempo al rango del palo nuevo si se sale.
+  recupera el estado de trabajo de ese palo, con su propio tempo.
 - **No se pierde el trabajo.** Los patrones de 24 y de 8 posiciones no son
   convertibles, así que cada palo guarda su propio estado de trabajo: ir a
   tangos y volver deja lo de antes donde estaba.
