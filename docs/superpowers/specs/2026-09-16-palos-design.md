@@ -19,7 +19,10 @@ En `assets/compas.js`:
 - `SLOTS = 24` — la rejilla, como constante de módulo.
 - `BEATS` — los doce tiempos con el 12 arriba.
 - `SYLL` y `STRIP` — el conteo hablado y su orden.
-- `ACCENTS` — las dos variantes del compás de doce.
+- `ACCENTS` — las dos variantes del compás de doce. Pasa a llamarse
+  `PATTERNS`: la lista **es** el patrón rítmico del palo, y cada posición
+  suya es un acento dentro de él. El nombre viejo confundía la parte con
+  el todo.
 - `basePattern()` — el patrón de arranque, con posiciones literales.
 - `beatLabel()` — el "y medio" de la contra.
 - `clickRate()` — tiene un `2` literal (las subdivisiones por tiempo).
@@ -45,15 +48,15 @@ Una tabla `PALOS` en `compas.js`. Cada palo se describe entero:
   count: ["dos","un","dos","tres",...], // conteo hablado, por posición
   strip: [11,0,1,2,...],    // orden en que se recita
   offLabel: "y medio",      // cómo se llama la contra: "9 y medio"
-  variants: [
-    { id: "7", label: "12·3·7·8·10", accents: [0,3,7,8,10] },
-    { id: "6", label: "12·3·6·8·10", accents: [0,3,6,8,10] }
+  patterns: [               // patrones de compás del palo (PATTERNS)
+    { id: "7", label: "12·3·7·8·10", pattern: [0,3,7,8,10] },
+    { id: "6", label: "12·3·6·8·10", pattern: [0,3,6,8,10] }
   ],
   tempo: { min: 80, max: 260, default: 150 },
-  base(variant) {          // patrón de arranque: slots por voz, no tiempos
+  base(patternId) {        // voces de arranque: slots por voz, no tiempos
     return {
       grave: beats([0, 3, 10]),                    // helper: tiempo → slot
-      seco: beats([variant === "6" ? 6 : 7, 8]),
+      seco: beats([patternId === "6" ? 6 : 7, 8]),
       fantasma: offbeats(),                        // todas las contras
       metro: beats([0, 2, 4, 6, 8, 10])            // el clic, en los pares
     };
@@ -75,7 +78,7 @@ Las dos entradas iniciales:
 | Tiempos | 12, el 12 arriba | 4, el 1 arriba |
 | `sub` → rejilla | 2 → 24 posiciones | 2 → 8 posiciones |
 | Contra | "y medio" | "y" |
-| Variantes | `12·3·7·8·10`, `12·3·6·8·10` | `1·3` (acentos en 1 y 3) |
+| Patrones de compás | `12·3·7·8·10`, `12·3·6·8·10` | `1·3` |
 | Conteo | un DOS un dos TRES… | UN dos TRES cuatro |
 | Clic | pares: 12,2,4,6,8,10 | 1 y 3 |
 | Orden del conteo | arranca en el 11 (`un DOS`) | del 1 al 4, sin arranque |
@@ -93,16 +96,16 @@ por bulerías, uno de los cuatro en tangos.
 ## Estado de la aplicación
 
 ```js
-{ palo: "solea-bulerias", variant: "7", bpm: 150,
+{ palo: "solea-bulerias", pattern: "7", bpm: 150,
   rings: { grave: {on:[…], offset, gain, muted}, seco: …, fantasma: …, metro: … } }
 ```
 
 `on` tiene siempre la longitud de la rejilla del palo activo. `sanitize()`
 valida contra el palo, no contra una constante.
 
-Los identificadores de variante pasan a ser **cadenas** (`"7"`, `"6"`, `"13"`),
-porque en tangos no son números de tiempo. Lo guardado y los enlaces viejos
-llevan el número 7 o 6: se mapean a `"7"` y `"6"` al leer.
+Los identificadores de patrón de compás pasan a ser **cadenas** (`"7"`, `"6"`,
+`"13"`), porque en tangos "1·3" no es un número de tiempo. Lo guardado y los
+enlaces viejos llevan el número 7 o 6: se mapean a `"7"` y `"6"` al leer.
 
 Cada palo guarda **su propio ppm** en su estado de trabajo; el `default` del
 palo solo se usa la primera vez, y el rango solo se aplica al entrar por
@@ -115,8 +118,10 @@ primera vez o al leer un valor fuera de límites.
 - **No se pierde el trabajo.** Los patrones de 24 y de 8 posiciones no son
   convertibles, así que cada palo guarda su propio estado de trabajo: ir a
   tangos y volver deja lo de antes donde estaba.
-- **Variantes de acento**: un selector debajo del palo. Si el palo tiene una
-  sola variante, la fila **no se muestra** (decidido en conversación).
+- **Patrón de compás**: un selector debajo del palo, etiquetado así en
+  pantalla — "Patrón" a secas chocaría con los patrones de cajón de la
+  biblioteca y del botón de arranque. Si el palo tiene un solo patrón de
+  compás, la fila **no se muestra** (decidido en conversación).
 - **Tangos arranca vacío** en las tres voces del cajón: compás, números,
   acentos y clic sí; lo que toca el cajón encima lo escribe Juanma o su
   profesor. Un texto en la tarjeta lo dice, para que el vacío se lea como
@@ -136,9 +141,9 @@ primera vez o al leer un valor fuera de límites.
 - **Biblioteca**: cada patrón guarda su `palo`; los existentes se migran a
   `solea-bulerias`. Cargar un patrón cambia al palo que le corresponde. La
   lista muestra el palo de cada patrón.
-- **URL, formato 3**: `3.<code>.<variante>.<ppm>.<voz>-<rot>…`, con el hex de
+- **URL, formato 3**: `3.<code>.<patrón>.<ppm>.<voz>-<rot>…`, con el hex de
   longitud `ceil(slots/4)`. Los enlaces `1.` y `2.` se siguen leyendo como
-  soleá por bulerías, con su variante numérica.
+  soleá por bulerías, con su patrón numérico.
 
 ## Refactor: un solo camino para mutar
 
@@ -154,7 +159,7 @@ update(fn, nivel)   // nivel: "rebuild" | "refresh"
 ```
 
 - `fn` muta el estado.
-- **rebuild** — cambia el palo o la variante: `dial.drawStatic`, `drawDots`,
+- **rebuild** — cambia el palo o el patrón de compás: `dial.drawStatic`, `drawDots`,
   `drawCount`, `place`, `paint`, panel y nota del metrónomo.
 - **refresh** — cambia un patrón, una rotación, un volumen: solo atributos
   (`place`/`paint`) y la nota del metrónomo.
@@ -168,6 +173,8 @@ clic cortaría los destellos a media animación y perdería el foco del teclado.
 - Patrones de cajón para tangos: los aporta Juanma.
 - La biblioteca de patrones curados por palo: acordada para más adelante.
 - Cambiar los identificadores internos de las voces (`seco`, `fantasma`).
+- Sonar el patrón de compás. Ahora que se llama por su nombre se ve que es
+  tocable: eso son las palmas, y serían una quinta órbita. No entra aquí.
 - Resolución conmutable dentro de un palo.
 
 ## Pruebas
