@@ -17,9 +17,9 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Cajón flamenco · soleá por bulerías</div>
+    <div class="eyebrow">Cajón flamenco · <span id="paloName">soleá por bulerías</span></div>
     <h1>Compás en <em>órbita</em></h1>
-    <p class="lede">Doce tiempos cerrados en círculo, con el 12 arriba como en un reloj. Cada voz del cajón gira en su propia órbita sobre una rejilla de veinticuatro medios tiempos: el grave y el agudo caen en el tiempo o en su medio, y el relleno cubre las contras. En el centro, el clic del metrónomo — que en este compás no va en cada pulso, sino en los pares.</p>
+    <p class="lede">Un compás cerrado en círculo, con su primer tiempo arriba como en un reloj. Cada voz del cajón gira en su propia órbita sobre la rejilla del palo: el grave y el agudo caen en el tiempo o en su subdivisión, y el relleno cubre las contras. En el centro, el clic del metrónomo — que no va en cada pulso, y por eso el metrónomo de verdad se pone a la mitad de ppm.</p>
   </header>
 
   <div class="stage">
@@ -53,20 +53,22 @@
 
       <div class="card">
         <h2>Compás</h2>
+        <div class="row" style="margin-bottom:12px">
+          <label for="palo">Palo</label>
+          <select id="palo"></select>
+        </div>
+        <div class="row" id="patternRow" style="margin-bottom:12px">
+          <label for="pattern">Patrón de compás</label>
+          <select id="pattern"></select>
+        </div>
         <div class="row" style="margin-bottom:8px">
           <label for="tempo">Tempo</label>
           <input type="range" id="tempo" min="80" max="260" step="2" value="150">
           <span class="num" id="tempoVal">150</span>
         </div>
         <p class="metro-note" id="metroNote"></p>
-        <div class="row">
-          <label>Acento</label>
-          <div class="seg">
-            <button id="v7" aria-pressed="true">12·3·7·8·10</button>
-            <button id="v6" aria-pressed="false">12·3·6·8·10</button>
-          </div>
-        </div>
-        <p class="hint">El 7 es como se cuenta en muchas escuelas; el 6 es la versión más regular. Cambiar de acento mueve el anillo de tiempos, no lo que ya hayas escrito: usa <em>patrón base</em> para regenerar las voces sobre el acento elegido.</p>
+        <p class="hint" id="paloHint" hidden></p>
+        <p class="hint">Cambiar el patrón de compás mueve los acentos y las mayúsculas del conteo, no lo que ya hayas escrito: usa <em>patrón base</em> para regenerar las voces sobre el patrón elegido.</p>
       </div>
 
       <div class="card">

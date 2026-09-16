@@ -159,6 +159,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 input[type=range]::-moz-range-track{height:2px;background:var(--hairline);border-radius:2px}
 input[type=range]::-moz-range-thumb{width:13px;height:13px;border:none;border-radius:50%;background:var(--ink)}
 .row{display:flex;align-items:center;gap:10px}
+select{font-family:var(--mono);font-size:11.5px;color:var(--ink);
+  background:var(--surface-2);border:1px solid transparent;border-radius:4px;
+  padding:5px 8px;cursor:pointer;flex:1;min-width:0}
+select:hover{border-color:var(--hairline)}
 .row label{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
   text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
 .num{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;
