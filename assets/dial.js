@@ -28,10 +28,12 @@ export function createDial(svg, countEl, onToggle) {
   const gStatic = svg.querySelector("#static");
   const gDots = svg.querySelector("#dots");
   const needle = svg.querySelector("#needle");
+  const gHits = svg.querySelector("#hits");
   let sweep = null;
   let numEls = [];
   let sylEls = {};
   let dots = {};
+  let hits = {};   // círculos transparentes: el área que recibe el dedo
   let lastBeat = -1;
 
   /* Anillos, radios de los tiempos, números y marcas de acento. */
@@ -71,11 +73,22 @@ export function createDial(svg, countEl, onToggle) {
 
   /* Un punto por posición de la rejilla y voz. Se crean al cambiar de palo;
      luego solo se recolocan. */
+  /* Radio del área táctil: la mitad de la separación entre puntos vecinos del
+     anillo, pero sin invadir el anillo de al lado. En un móvil eso deja unos
+     24 px de diámetro — el máximo honesto con cuatro anillos en 342 px. */
+  function hitRadius(p, ring) {
+    const spacing = (2 * Math.PI * ring.radius) / slotsOf(p);
+    return Math.min(spacing / 2, 18);
+  }
+
   function drawDots(p) {
     gDots.textContent = "";
+    gHits.textContent = "";
     dots = {};
+    hits = {};
     for (const ring of RINGS) {
       const arr = [];
+      const hitArr = [];
       for (let i = 0; i < slotsOf(p); i++) {
         const dot = el("circle", {
           class: "dot", "data-voice": ring.id, "data-on": "0",
@@ -91,8 +104,17 @@ export function createDial(svg, countEl, onToggle) {
         });
         gDots.appendChild(dot);
         arr.push(dot);
+
+        /* El área táctil va encima de todo y solo escucha en pantallas de
+           dedo (lo decide el CSS con pointer:coarse), así que en escritorio
+           no roba el hover ni la precisión del ratón. */
+        const hit = el("circle", { class: "hit", r: hitRadius(p, ring) });
+        hit.addEventListener("click", () => onToggle(ring.id, i));
+        gHits.appendChild(hit);
+        hitArr.push(hit);
       }
       dots[ring.id] = arr;
+      hits[ring.id] = hitArr;
     }
   }
 
@@ -112,6 +134,9 @@ export function createDial(svg, countEl, onToggle) {
         dot.setAttribute("cy", cy);
         dot.setAttribute("r", half ? ring.dotRHalf : ring.dotR);
         dot.classList.toggle("half", half);
+        const hit = hits[ring.id][idx];
+        hit.setAttribute("cx", cx);
+        hit.setAttribute("cy", cy);
       });
     }
   }

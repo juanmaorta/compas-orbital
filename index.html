@@ -39,6 +39,7 @@
             <line x1="260" y1="260" x2="260" y2="32"></line>
             <circle cx="260" cy="32" r="3.5"></circle>
           </g>
+          <g id="hits"></g>
         </svg>
         <button class="hub" id="hub" aria-label="Reproducir el compás">
           <span class="glyph" id="hubGlyph">▶</span>
@@ -51,12 +52,6 @@
     </div>
 
     <div class="panel">
-      <div class="card">
-        <h2>Órbitas</h2>
-        <div id="voices"></div>
-        <p class="hint">Los puntos grandes son los doce tiempos; los pequeños, los medios — el <em>9 y medio</em>, por ejemplo. La rotación mueve la voz de medio en medio tiempo.</p>
-      </div>
-
       <div class="card">
         <h2>Compás</h2>
         <div class="row" style="margin-bottom:12px">
@@ -77,21 +72,32 @@
         <p class="hint">Cambiar el patrón de compás mueve los acentos y las mayúsculas del conteo, no lo que ya hayas escrito: usa <em>patrón base</em> para regenerar las voces sobre el patrón elegido.</p>
       </div>
 
-      <div class="card">
-        <h2>Biblioteca</h2>
-        <div class="lib-form">
-          <input type="text" id="libName" placeholder="bulería remate 1" maxlength="60"
-                 autocomplete="off" aria-label="Nombre del patrón">
-          <button id="libSave">Guardar</button>
+      <details class="more" id="more" open>
+        <summary>Órbitas, volúmenes y biblioteca</summary>
+        <div class="more-body">
+        <div class="card">
+          <h2>Órbitas</h2>
+          <div id="voices"></div>
+          <p class="hint">Los puntos grandes son los doce tiempos; los pequeños, los medios — el <em>9 y medio</em>, por ejemplo. La rotación mueve la voz de medio en medio tiempo.</p>
         </div>
-        <ul class="lib-list" id="libList"></ul>
-        <div class="seg" style="margin-top:12px">
-          <button id="share">Copiar enlace</button>
-          <button id="reset">Patrón base</button>
-          <button id="clear">Vaciar</button>
+
+        <div class="card">
+          <h2>Biblioteca</h2>
+          <div class="lib-form">
+            <input type="text" id="libName" placeholder="bulería remate 1" maxlength="60"
+                   autocomplete="off" aria-label="Nombre del patrón">
+            <button id="libSave">Guardar</button>
+          </div>
+          <ul class="lib-list" id="libList"></ul>
+          <div class="seg" style="margin-top:12px">
+            <button id="share">Copiar enlace</button>
+            <button id="reset">Patrón base</button>
+            <button id="clear">Vaciar</button>
+          </div>
+          <p class="hint" id="libHint">Los patrones se guardan en este navegador. <em>Copiar enlace</em> mete el compás entero en la URL, para mandárselo a alguien.</p>
         </div>
-        <p class="hint" id="libHint">Los patrones se guardan en este navegador. <em>Copiar enlace</em> mete el compás entero en la URL, para mandárselo a alguien.</p>
-      </div>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -103,6 +109,12 @@
 <script>
   /* Instalable y con arranque sin conexión. Va fuera del módulo a propósito:
      si el grafo de módulos fallara, el registro no debe caer con él. */
+  /* En móvil, los ajustes empiezan plegados: lo que se usa tocando es el
+     dial, el conteo y el tempo. Van abiertos en el HTML para que sin JS se
+     vea todo. */
+  const more = document.getElementById("more");
+  if (more && window.matchMedia("(max-width: 719px)").matches) more.open = false;
+
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("sw.js").catch(() => {});

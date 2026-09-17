@@ -147,6 +147,18 @@ pantalla de inicio*. Queda con su icono, a pantalla completa y **abre sin
 conexión**, que es lo que importa en un local de ensayo o en un aula con wifi
 de pena.
 
+El diseño en pantalla pequeña sigue un criterio: **lo que se usa tocando cabe
+en una pantalla sin scroll** — el dial, el conteo y la tarjeta *Compás* (palo,
+patrón y tempo). Las órbitas y la biblioteca se van a un plegable, y el móvil
+en horizontal oculta la cabecera y ajusta el dial al alto de la ventana: ese es
+el modo atril.
+
+Los puntos llevan un área táctil invisible más grande que el punto, de unos
+24 px — el máximo posible sin invadir el anillo vecino. Solo escucha en
+pantallas de dedo (`pointer: coarse`), para no quitarle al ratón el hover ni su
+precisión. Aun así, **editar en un móvil sigue siendo delicado** en soleá por
+bulerías, que tiene 24 posiciones por órbita: para escribir patrones, tablet.
+
 Dos límites de plataforma que conviene saber:
 
 - **El interruptor de silencio del iPhone silencia el Web Audio en Safari.** Si
@@ -187,11 +199,6 @@ vacío y deploy command `npx wrangler deploy`.
 
 ## Pendiente
 
-- **Usable en móvil y tablet.** Hoy el diseño es de dos columnas que se apilan
-  por debajo de 880 px: en un móvil quedan el dial arriba y todos los
-  controles debajo, así que se toca y se hace scroll a la vez. En un atril eso
-  no sirve. Hace falta dial a pantalla completa, tempo y play siempre visibles
-  y el resto plegado — el objetivo real es una tablet en el atril.
 - **Patrones de tangos**, y una biblioteca de patrones curados por palo que
   venga con la página.
 - **Samples reales.** Tres o cuatro tomas de cada golpe, alternadas al azar,

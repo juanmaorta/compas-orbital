@@ -57,7 +57,7 @@ h1 em{font-style:italic;font-weight:400}
 
 /* ---------- rejilla ---------- */
 .stage{display:grid;grid-template-columns:minmax(0,1fr) 332px;gap:36px;align-items:start}
-@media (max-width:880px){.stage{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1000px){.stage{grid-template-columns:minmax(0,1fr)}}
 
 /* ---------- dial ---------- */
 .dial-col{display:flex;flex-direction:column;gap:20px;min-width:0}
@@ -104,9 +104,18 @@ h1 em{font-style:italic;font-weight:400}
 .dot[data-voice="fantasma"][data-on="1"]{fill:var(--fantasma);stroke:none}
 /* el clic comparte el color de la aguja: no es una voz, es el reloj */
 .dot[data-voice="metro"][data-on="1"]{fill:var(--needle);stroke:none}
+.needle{pointer-events:none}
 .needle line{stroke:var(--needle);stroke-width:1.5;stroke-linecap:round}
 .needle circle{fill:var(--needle)}
-.sweep{fill:var(--needle-soft)}
+.sweep{fill:var(--needle-soft);pointer-events:none}
+
+/* Área táctil de los puntos: invisible y más grande que el punto. Solo
+   escucha donde se toca con el dedo — en escritorio dejaría al ratón sin
+   hover y sin la precisión que sí tiene. */
+.hit{fill:transparent;pointer-events:none}
+@media (pointer:coarse){
+  .hit{pointer-events:all;cursor:pointer}
+}
 
 /* ---------- tira del conteo ---------- */
 .count{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;
@@ -173,6 +182,25 @@ select:hover{border-color:var(--hairline)}
 .seg{display:flex;gap:4px;flex-wrap:wrap}
 .hint{font-size:11.5px;color:var(--ink-soft);margin:10px 0 0;line-height:1.45}
 
+/* ---------- ajustes plegables (en móvil) ---------- */
+.more{min-width:0}
+.more > summary{list-style:none;cursor:pointer;
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-soft);background:var(--surface);
+  border:1px solid var(--hairline-soft);border-radius:6px;padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px}
+.more > summary::-webkit-details-marker{display:none}
+.more > summary::after{content:"▾";font-size:11px;color:var(--ink-faint)}
+.more[open] > summary::after{content:"▴"}
+.more > summary:hover{border-color:var(--hairline)}
+.more-body{display:flex;flex-direction:column;gap:14px}
+.more[open] > .more-body{margin-top:14px}
+/* En pantalla ancha no hay nada que plegar: es una sección más. */
+@media (min-width:720px){
+  .more > summary{display:none}
+  .more[open] > .more-body{margin-top:0}
+}
+
 /* ---------- biblioteca ---------- */
 .lib-form{display:flex;gap:6px;margin-bottom:12px}
 .lib-form input[type=text]{flex:1;min-width:0;font-family:var(--mono);font-size:12px;
@@ -197,6 +225,40 @@ select:hover{border-color:var(--hairline)}
 footer{border-top:1px solid var(--hairline-soft);padding-top:16px;
   font-size:12px;color:var(--ink-soft);max-width:70ch}
 footer b{color:var(--ink);font-weight:500}
+
+/* ---------- móvil ----------
+   El criterio: dial, conteo y tempo (la tarjeta Compás) en una pantalla sin
+   scroll. La entradilla se va; el pie se queda al final, que ahí no estorba y
+   es lo que explica la página a quien abre el enlace por primera vez. */
+@media (max-width:719px){
+  .wrap{padding:18px 14px 40px;gap:18px}
+  header{gap:4px}
+  h1{font-size:28px;letter-spacing:-.015em}
+  .lede{display:none}
+  .stage{gap:18px}
+  .dial-col{gap:14px}
+  .count{font-size:12px;gap:2px}
+  .syl{padding:4px 6px}
+  .count-note{font-size:11.5px}
+  .card{padding:14px}
+  .hint{font-size:11px}
+  footer{font-size:11.5px}
+}
+
+/* ---------- móvil tumbado: el caso del atril ----------
+   Va después del corte de 1000px a propósito: aquí sí interesan dos columnas,
+   con el dial ajustado al alto de la ventana en lugar del ancho. */
+@media (orientation:landscape) and (max-height:520px){
+  header{display:none}
+  footer{display:none}
+  .wrap{padding:10px 12px 18px;gap:12px}
+  .stage{grid-template-columns:minmax(0,1fr) minmax(240px,330px);gap:16px}
+  .dial{max-width:min(560px,calc(100vh - 104px))}
+  .hub{width:72px;height:72px}
+  .hub .glyph{font-size:15px}
+  .count{font-size:11px;gap:2px}
+  .count-note{display:none}
+}
 
 @media (prefers-reduced-motion:reduce){
   .dot,.beat-num,.syl{transition:none}

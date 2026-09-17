@@ -8,7 +8,7 @@
    versiones de los módulos. El precio es que hay que SUBIR LA VERSIÓN de aquí
    abajo en cada despliegue que toque los ficheros; si no, quien ya tenga la
    app instalada seguirá viendo la versión vieja. */
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = `compas-orbital-${VERSION}`;
 
 const PRECACHE = [
