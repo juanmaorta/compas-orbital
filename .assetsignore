@@ -1,0 +1,14 @@
+# Lo que NO es el sitio. Sin esto, un despliegue desde la raíz sube también el
+# .git entero, las pruebas y la documentación.
+.git
+.gitignore
+.assetsignore
+.DS_Store
+**/.DS_Store
+node_modules
+docs
+test
+tools
+package.json
+package-lock.json
+wrangler.jsonc
