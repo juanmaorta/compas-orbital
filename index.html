@@ -25,7 +25,6 @@
   <header>
     <div class="eyebrow">Cajón flamenco · <span id="paloName">soleá por bulerías</span></div>
     <h1>Compás en <em>órbita</em></h1>
-    <p class="lede">Un compás cerrado en círculo, con su primer tiempo arriba como en un reloj. Cada voz del cajón gira en su propia órbita sobre la rejilla del palo: el grave y el agudo caen en el tiempo o en su subdivisión, y el relleno cubre las contras. En el centro, el clic del metrónomo — que no va en cada pulso, y por eso el metrónomo de verdad se pone a la mitad de ppm.</p>
   </header>
 
   <div class="stage">
@@ -48,7 +47,6 @@
       </div>
 
       <div class="count" id="count"></div>
-      <p class="count-note">Se cuenta arrancando en el <b>un&nbsp;DOS</b> de los tiempos 11 y 12. Las mayúsculas son los acentos.</p>
     </div>
 
     <div class="panel">
@@ -69,7 +67,7 @@
         </div>
         <p class="metro-note" id="metroNote"></p>
         <p class="hint" id="paloHint" hidden></p>
-        <p class="hint">Cambiar el patrón de compás mueve los acentos y las mayúsculas del conteo, no lo que ya hayas escrito: usa <em>patrón base</em> para regenerar las voces sobre el patrón elegido.</p>
+        <p class="hint" id="iosHint" hidden></p>
       </div>
 
       <details class="more" id="more" open>
@@ -78,7 +76,6 @@
         <div class="card">
           <h2>Órbitas</h2>
           <div id="voices"></div>
-          <p class="hint">Los puntos grandes son los doce tiempos; los pequeños, los medios — el <em>9 y medio</em>, por ejemplo. La rotación mueve la voz de medio en medio tiempo.</p>
         </div>
 
         <div class="card">
@@ -94,16 +91,13 @@
             <button id="reset">Patrón base</button>
             <button id="clear">Vaciar</button>
           </div>
-          <p class="hint" id="libHint">Los patrones se guardan en este navegador. <em>Copiar enlace</em> mete el compás entero en la URL, para mandárselo a alguien.</p>
+          <p class="hint" id="libHint">Se guardan en este navegador. <em>Copiar enlace</em> lleva el compás dentro.</p>
         </div>
         </div>
       </details>
     </div>
   </div>
 
-  <footer>
-    El patrón de arranque es un punto de partida, no dogma: <b>grave</b> en 12, 3 y 10; <b>agudo</b> en 7 y 8 — entre las dos voces quedan cubiertos los cinco acentos —; <b>relleno</b> en todas las contras. La rotación de cada órbita desplaza esa voz dentro del ciclo de medio en medio tiempo, sin reescribirla: es la manera de oír el mismo patrón entrando por otro sitio del compás. El <b>metrónomo</b> es la órbita interior y no es una voz: es el reloj contra el que se toca. En el compás de doce el clic cae en los pares — 12, 2, 4, 6, 8, 10 —, uno cada dos tiempos, y por eso el metrónomo de verdad va a la mitad de ppm que la página; la equivalencia está bajo el tempo. Los sonidos están sintetizados en el navegador: aproximan el grave, el agudo y el apagado, no sustituyen a un cajón.
-  </footer>
 </div>
 <script type="module" src="assets/app.js"></script>
 <script>

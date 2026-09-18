@@ -31,7 +31,7 @@ const $ = (id) => document.getElementById(id);
 const hub = $("hub"), hubGlyph = $("hubGlyph"), hubBpm = $("hubBpm");
 const tempo = $("tempo"), tempoVal = $("tempoVal");
 const paloSel = $("palo"), patternSel = $("pattern"), patternRow = $("patternRow");
-const paloName = $("paloName"), paloHint = $("paloHint");
+const paloName = $("paloName"), paloHint = $("paloHint"), iosHint = $("iosHint");
 const voicesEl = $("voices");
 const metroNote = $("metroNote");
 const libName = $("libName"), libSave = $("libSave"), libList = $("libList"), libHint = $("libHint");
@@ -397,6 +397,16 @@ document.addEventListener("keydown", (e) => {
     playing ? stop() : start();
   }
 });
+
+/* El silencio del dispositivo silencia también el Web Audio en iOS, y no se
+   puede consultar desde JavaScript: lo único honesto es decir dónde mirar. */
+const esApple = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+if (esApple) {
+  iosHint.textContent = "Si no suena, comprueba que el dispositivo no esté " +
+    "en silencio: en iOS eso silencia también el audio de la web.";
+  iosHint.hidden = false;
+}
 
 /* ---------- arranque ---------- */
 /* Los palos van al desplegable una sola vez. */

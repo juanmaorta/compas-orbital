@@ -53,7 +53,6 @@ header{display:flex;flex-direction:column;gap:6px}
 h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,6vw,54px);
   line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.01em}
 h1 em{font-style:italic;font-weight:400}
-.lede{max-width:62ch;color:var(--ink-soft);font-size:15px;margin:0}
 
 /* ---------- rejilla ---------- */
 .stage{display:grid;grid-template-columns:minmax(0,1fr) 332px;gap:36px;align-items:start}
@@ -125,8 +124,6 @@ h1 em{font-style:italic;font-weight:400}
 .syl.now{transition:none}        /* idem: la sílaba se enciende sin rampa */
 .syl.accent{color:var(--ink);font-weight:600;letter-spacing:.04em}
 .syl.now{background:var(--surface-2);color:var(--ink)}
-.count-note{text-align:center;font-size:12.5px;color:var(--ink-soft);
-  max-width:60ch;margin:0 auto}
 
 /* ---------- panel ---------- */
 .panel{display:flex;flex-direction:column;gap:14px;min-width:0}
@@ -222,9 +219,6 @@ select:hover{border-color:var(--hairline)}
 .lib-del.armed{color:var(--grave);font-size:10.5px}
 .lib-empty{font-size:12px;color:var(--ink-faint);font-style:italic;padding:2px 0}
 
-footer{border-top:1px solid var(--hairline-soft);padding-top:16px;
-  font-size:12px;color:var(--ink-soft);max-width:70ch}
-footer b{color:var(--ink);font-weight:500}
 
 /* ---------- móvil ----------
    El criterio: dial, conteo y tempo (la tarjeta Compás) en una pantalla sin
@@ -234,15 +228,12 @@ footer b{color:var(--ink);font-weight:500}
   .wrap{padding:18px 14px 40px;gap:18px}
   header{gap:4px}
   h1{font-size:28px;letter-spacing:-.015em}
-  .lede{display:none}
   .stage{gap:18px}
   .dial-col{gap:14px}
   .count{font-size:12px;gap:2px}
   .syl{padding:4px 6px}
-  .count-note{font-size:11.5px}
   .card{padding:14px}
   .hint{font-size:11px}
-  footer{font-size:11.5px}
 }
 
 /* ---------- móvil tumbado: el caso del atril ----------
@@ -250,14 +241,12 @@ footer b{color:var(--ink);font-weight:500}
    con el dial ajustado al alto de la ventana en lugar del ancho. */
 @media (orientation:landscape) and (max-height:520px){
   header{display:none}
-  footer{display:none}
   .wrap{padding:10px 12px 18px;gap:12px}
   .stage{grid-template-columns:minmax(0,1fr) minmax(240px,330px);gap:16px}
   .dial{max-width:min(560px,calc(100vh - 104px))}
   .hub{width:72px;height:72px}
   .hub .glyph{font-size:15px}
   .count{font-size:11px;gap:2px}
-  .count-note{display:none}
 }
 
 @media (prefers-reduced-motion:reduce){
