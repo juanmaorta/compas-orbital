@@ -6,6 +6,8 @@
 .DS_Store
 **/.DS_Store
 node_modules
+# temporales de wrangler: vive dentro del directorio de assets y se cuela
+.wrangler
 docs
 test
 tools
